@@ -1,0 +1,368 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#0b1020">
+  <title>Infrawatch | Cloud Status</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: #0b1020;
+      color: #e5eaf5;
+      font-family: Inter, system-ui, sans-serif;
+    }
+    .layout { display: flex; min-height: 100vh; }
+    aside {
+      width: 235px;
+      padding: 28px 18px;
+      background: #10182b;
+      border-right: 1px solid #202b40;
+      flex-shrink: 0;
+    }
+    .brand { font-size: 23px; font-weight: 800; color: #72a7ff; }
+    .brand span { color: white; }
+    .sub { color: #7e8ba5; font-size: 12px; margin: 8px 0 35px; }
+    nav a {
+      display: block;
+      padding: 12px;
+      margin: 7px 0;
+      border-radius: 8px;
+      color: #aab6cc;
+      text-decoration: none;
+      font-size: 14px;
+    }
+    nav a.active, nav a:hover {
+      background: #1c2b47;
+      color: #78aaff;
+    }
+    main { flex: 1; padding: 32px; min-width: 0; }
+    .top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 15px;
+      flex-wrap: wrap;
+      margin-bottom: 28px;
+    }
+    h1 { margin: 0; font-size: 26px; }
+    .muted { color: #8391aa; font-size: 13px; }
+    button {
+      background: #1d3458;
+      color: #b9d4ff;
+      border: 1px solid #315487;
+      padding: 10px 16px;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+    button:hover { background: #294875; }
+    .banner {
+      padding: 17px 20px;
+      border: 1px solid #176b4b;
+      background: #102c29;
+      border-radius: 12px;
+      margin-bottom: 22px;
+      color: #65e6ad;
+    }
+    .banner strong { display: block; margin-bottom: 5px; }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 15px;
+      margin-bottom: 22px;
+    }
+    .card, .panel {
+      background: #111b2e;
+      border: 1px solid #202d44;
+      border-radius: 12px;
+      padding: 19px;
+    }
+    .card .value { font-size: 27px; font-weight: 750; margin: 12px 0 5px; }
+    .green { color: #55d69a; }
+    .blue { color: #79aaff; }
+    .section-title { font-size: 17px; margin: 0 0 17px; }
+    .columns {
+      display: grid;
+      grid-template-columns: 1.4fr 1fr;
+      gap: 18px;
+      margin-bottom: 20px;
+    }
+    .service {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 13px 0;
+      border-bottom: 1px solid #202d44;
+      gap: 10px;
+      font-size: 14px;
+    }
+    .service:last-child { border: 0; }
+    .status { color: #55d69a; font-size: 12px; }
+    .dot {
+      display: inline-block;
+      width: 8px; height: 8px;
+      background: #55d69a;
+      border-radius: 50%;
+      margin-right: 8px;
+    }
+    .chart {
+      width: 100%;
+      height: 150px;
+      margin-top: 14px;
+    }
+    .incident {
+      padding: 14px 0;
+      border-bottom: 1px solid #202d44;
+      font-size: 13px;
+    }
+    .incident:last-child { border: 0; }
+    .tag {
+      display: inline-block;
+      padding: 4px 8px;
+      border-radius: 5px;
+      background: #27354c;
+      color: #a9c9ff;
+      font-size: 11px;
+      margin-top: 8px;
+    }
+    footer {
+      margin-top: 25px;
+      color: #73819a;
+      font-size: 12px;
+    }
+    @media(max-width: 950px) {
+      .grid { grid-template-columns: repeat(2, 1fr); }
+      .columns { grid-template-columns: 1fr; }
+    }
+    @media(max-width: 600px) {
+      aside { width: 65px; padding: 20px 8px; }
+      .brand { font-size: 16px; }
+      .sub, nav .nav-text { display: none; }
+      nav a { text-align: center; padding: 12px 4px; }
+      main { padding: 20px 12px; }
+      .grid { grid-template-columns: 1fr 1fr; gap: 9px; }
+      .card { padding: 12px; }
+      .card .value { font-size: 21px; }
+    }
+  </style>
+</head>
+<body>
+<div class="layout">
+  <aside>
+    <div class="brand">INFRA<span>WATCH</span></div>
+    <div class="sub">CLOUD MONITORING PLATFORM</div>
+    <nav>
+      <a class="active" href="#overview">◈ <span class="nav-text">Overview</span></a>
+      <a href="#services">▦ <span class="nav-text">Services</span></a>
+      <a href="#uptime">⌁ <span class="nav-text">Uptime</span></a>
+      <a href="#incidents">◷ <span class="nav-text">Incidents</span></a>
+    </nav>
+  </aside>
+
+  <main>
+    <div class="top" id="overview">
+      <div>
+        <h1>Infrastructure Overview</h1>
+        <p class="muted">Monitor your cloud infrastructure in one place.</p>
+      </div>
+      <button id="refresh">↻ Refresh</button>
+    </div>
+
+    <div class="banner">
+      <strong>✓ All Systems Operational</strong>
+      <span class="muted">All demo services are currently reporting healthy status.</span>
+    </div>
+
+    <div class="grid">
+      <div class="card">
+        <div class="muted">Overall Uptime</div>
+        <div class="value green">99.98%</div>
+        <div class="muted">Last 30 days</div>
+      </div>
+      <div class="card">
+        <div class="muted">Monitored Services</div>
+        <div class="value blue">12</div>
+        <div class="muted">Across 4 providers</div>
+      </div>
+      <div class="card">
+        <div class="muted">Active Incidents</div>
+        <div class="value green">0</div>
+        <div class="muted">No active demo incidents</div>
+      </div>
+      <div class="card">
+        <div class="muted">Avg. Response Time</div>
+        <div class="value">124 ms</div>
+        <div class="muted">Illustrative demo value</div>
+      </div>
+    </div>
+    <section class="panel" id="backend-health" style="margin-bottom: 20px;">
+  <h2 class="section-title">Backend & Database Health</h2>
+
+  <div class="service">
+    <span>Infrawatch Worker API</span>
+    <span id="api-status" class="status">Checking...</span>
+  </div>
+
+  <div class="service">
+    <span>Cloudflare D1 Database</span>
+    <span id="db-status" class="status">Checking...</span>
+  </div>
+
+  <p class="muted" id="api-message">Connecting to backend...</p>
+</section>
+    <div class="columns">
+      <section class="panel" id="services">
+        <h2 class="section-title">Cloud Service Health</h2>
+        <div id="service-list">
+          <div class="service"><span>Amazon Web Services</span><span class="status"><i class="dot"></i>Operational</span></div>
+          <div class="service"><span>Microsoft Azure</span><span class="status"><i class="dot"></i>Operational</span></div>
+          <div class="service"><span>Google Cloud</span><span class="status"><i class="dot"></i>Operational</span></div>
+          <div class="service"><span>Cloudflare</span><span class="status"><i class="dot"></i>Operational</span></div>
+        </div>
+      </section>
+
+      <section class="panel" id="uptime">
+        <h2 class="section-title">Uptime History</h2>
+        <div class="muted">Illustrative uptime trend · Last 7 days</div>
+        <svg class="chart" viewBox="0 0 400 150" preserveAspectRatio="none">
+          <defs>
+            <linearGradient id="fill" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#4d91ff" stop-opacity=".35"/>
+              <stop offset="100%" stop-color="#4d91ff" stop-opacity="0"/>
+            </linearGradient>
+          </defs>
+          <path d="M0 35 L65 32 L130 37 L195 28 L260 33 L330 25 L400 30 L400 150 L0 150Z" fill="url(#fill)"/>
+          <path d="M0 35 L65 32 L130 37 L195 28 L260 33 L330 25 L400 30" fill="none" stroke="#68a4ff" stroke-width="3"/>
+        </svg>
+        <div class="muted">Mon · Tue · Wed · Thu · Fri · Sat · Sun</div>
+      </section>
+    </div>
+    <section class="panel" id="health-history" style="margin-bottom: 20px;">
+  <h2 class="section-title">Backend Health History</h2>
+  <p class="muted">Latest 20 checks recorded in Cloudflare D1.</p>
+
+  <div id="history-list">
+    Loading health history...
+  </div>
+</section>
+
+    <section class="panel" id="incidents">
+      <h2 class="section-title">Recent Incidents</h2>
+      <div class="incident">
+        <strong>No active incidents</strong>
+        <p class="muted">There are currently no active incidents in this demo.</p>
+        <span class="tag">All clear</span>
+      </div>
+      <div class="incident">
+        <strong>Previous maintenance window</strong>
+        <p class="muted">Scheduled maintenance · Example historical record</p>
+        <span class="tag">Resolved</span>
+      </div>
+    </section>
+
+    <footer>
+      Demo monitoring data · Last updated: <span id="updated">Loading...</span>
+      <br><br>
+      INFRAWATCH · Cloud Infrastructure Status Dashboard
+    </footer>
+  </main>
+</div>
+
+<script>
+
+async function checkBackendHealth() {
+  const apiStatus = document.getElementById("api-status");
+  const dbStatus = document.getElementById("db-status");
+  const apiMessage = document.getElementById("api-message");
+
+  apiStatus.textContent = "Checking...";
+  dbStatus.textContent = "Checking...";
+
+  try {
+    const response = await fetch("/api/health");
+    const data = await response.json();
+
+    if (!response.ok || !data.success) {
+      throw new Error(data.message || "Health check failed");
+    }
+
+    apiStatus.textContent = "Connected";
+    dbStatus.textContent =
+      data.database === "connected" ? "Connected" : "Disconnected";
+
+    apiMessage.textContent =
+      "Last successful API check: " +
+      new Date(data.timestamp).toLocaleString();
+
+  } catch (error) {
+    apiStatus.textContent = "Unavailable";
+    dbStatus.textContent = "Unknown";
+    apiMessage.textContent = "Backend error: " + error.message;
+  }
+
+  updateTime();
+}
+
+async function loadHealthHistory() {
+  const historyList = document.getElementById("history-list");
+
+  try {
+    const response = await fetch("/api/history");
+    const data = await response.json();
+
+    if (!response.ok || !data.success) {
+      throw new Error(data.error || "Unable to load history");
+    }
+
+    if (data.checks.length === 0) {
+      historyList.textContent = "No health checks recorded yet.";
+      return;
+    }
+
+    historyList.replaceChildren();
+
+    data.checks.forEach((check) => {
+      const item = document.createElement("div");
+      item.className = "service";
+
+      const details = document.createElement("span");
+      details.textContent =
+        `${check.service_name} · ${check.checked_at}`;
+
+      const status = document.createElement("span");
+      status.className = "status";
+      status.textContent =
+        `${check.api_status} · ${check.response_time_ms} ms`;
+
+      item.append(details, status);
+      historyList.appendChild(item);
+    });
+
+  } catch (error) {
+    historyList.textContent = "History error: " + error.message;
+  }
+}
+
+function updateTime() {
+  document.getElementById("updated").textContent =
+    new Date().toLocaleString();
+}
+
+document.getElementById("refresh").addEventListener("click", () => {
+  checkBackendHealth();
+  loadHealthHistory();
+});
+
+checkBackendHealth();
+loadHealthHistory();
+
+setInterval(() => {
+  checkBackendHealth();
+  loadHealthHistory();
+}, 30000);
+
+</script>
+</body>
+</html>

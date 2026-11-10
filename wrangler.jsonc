@@ -1,0 +1,23 @@
+
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "cloud-infrastructure-status-dashboard",
+  "main": "src/index.js",
+  "compatibility_date": "2026-11-09",
+  "assets": {
+    "directory": "./public",
+    "run_worker_first": ["/api/*"]
+  },
+  "observability": {
+    "enabled": true
+  },
+  "upload_source_maps": true,
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "infrawatch-db",
+      "database_id": "a20c0a67-259c-4fe1-bafe-2dca5aad11f8"
+    }
+  ]
+}
+
